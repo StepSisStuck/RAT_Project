@@ -31,8 +31,14 @@ jobs:
     - name: Build EXE with PyInstaller
       run: |
         pyinstaller --onefile --noconsole client/client.py
-
-    # Step 5: Upload the EXE as an artifact
+        
+  # Step 5: Rename file if necessary
+    - name: Rename File Extension
+      run: |
+        if [ -f dist/client ]; then
+          mv dist/client dist/client.exe
+        fi
+    # Step 6: Upload the EXE as an artifact
     - name: Upload Client EXE
       uses: actions/upload-artifact@v3
       with:
