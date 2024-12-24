@@ -1,5 +1,6 @@
 import socket
 import threading
+from utils import decrypt_data
 
 clients = {}
 
@@ -18,7 +19,8 @@ def handle_client(client_socket, addr):
 
     while True:
         try:
-            response = client_socket.recv(4096).decode()
+            encrypted_response = client_socket.recv(4096)
+            response = decrypt_data(encrypted_response, "your-encryption-key")
             if response:
                 print(f"Response from {addr}: {response}")
         except ConnectionResetError:
